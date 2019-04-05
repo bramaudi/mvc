@@ -1,1 +1,3 @@
-<?php require 'router.php';
+<?php
+
+require './app/init.php';
