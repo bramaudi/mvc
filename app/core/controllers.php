@@ -12,7 +12,7 @@ class Controllers {
 
 	public function view($view, $data = [])
 	{
-		$path = './app/views/' .$view. '.php';
+		$path = './app/views/' .$view. '.html';
 		if (file_exists($path)) {
 			foreach ($data as $key => $value) {
 				$this->tpl->set($key, $value);
@@ -30,7 +30,7 @@ class Controllers {
 				echo '<span style="background: #dfd; font-weight: bold">INFO</span>: views "<span style="background:#f0f0f0;"><code>'.$view.'</code></span>" not found.';
 			}
 			else {
-				require_once './app/views/errors/404.php';
+				require_once './app/views/errors/404.html';
 			}
 		}
 	}
@@ -49,7 +49,7 @@ class Controllers {
 				echo '<span style="background: #dfd; font-weight: bold">INFO</span>: models "<span style="background:#f0f0f0;"><code>'.$model.'</code></span>" not found.';
 			}
 			else {
-				require_once './app/views/errors/404.php';
+				require_once './app/views/errors/404.html';
 			}
 		}
 	}
