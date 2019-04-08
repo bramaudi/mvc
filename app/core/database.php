@@ -58,4 +58,18 @@ class Database {
 		$this->stmt->execute();
 	}
 
+
+	public function num_rows($query)
+	{
+		$this->stmt = $this->db->prepare($query);
+		$this->stmt->execute();
+		return $this->stmt->fetchColumn();
+	}
+
+
+	public function return($func, $params = null)
+	{
+		return $this->stmt->$func($params);
+	}
+
 }
