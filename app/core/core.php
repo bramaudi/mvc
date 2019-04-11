@@ -9,96 +9,62 @@ class Core extends Controllers {
 	protected $controller = 'home';
 	protected $method = 'main';
 	protected $params = [];
-	protected $url;
-	protected $path;
+
 	protected $debug = 0;
 
 	public function __construct($debug = 0)
 	{
 		$url = explode('/', rtrim($_SERVER['REQUEST_URI'], '/'));
 
-		$params = array();
 		if (count($url) > 3)
 		{
 			for ($i = 3; $i < count($url); $i++) {
-				array_push($params, $url[$i]);
+				array_push($this->params, $url[$i]);
 			}
 		}
 
-		$controller = isset($url[1]) ? $url[1] : 'home';
-		$method = isset($url[2]) ? $url[2] : 'main';
-		$path = './app/controllers/'.$controller.'.php';
+		$this->controller = isset($url[1]) ? $url[1] : $this->controller;
+		$this->method = isset($url[2]) ? $url[2] : $this->method;
 
-		// send to debug()
-		$this->controller = $controller;
-		$this->method	= $method;
-		$this->params	= $params;
-		$this->url = $url;
-		$this->path = $path;
-		$this->debug = $debug;
+		$path = './app/controllers/'.$this->controller.'.php';
 
-		if (file_exists($path))
-		{
-			require $path;
-			$c = new $controller;
+		// $params = empty($params) ? isset($url[1]) ? (array)$url[1] : array() : $params;
 
-			if (method_exists($c, $method))
+		if (!file_exists($path)) {
+			$this->notice('controller','"'.$this->controller.'" not found.');
+			$this->controller = 'home';
+			$this->params = (array)$url[1];
+		}
+
+		require './app/controllers/'.$this->controller.'.php';
+		$c = new $this->controller;
+
+		if (!method_exists($c, $this->method)) {
+			$this->notice('method','"'.$this->method.'" not found in "'.$this->controller.'" controller.');	
+			$this->method = 'main';
+			$method = 0;
+		} else {
+			$method = new ReflectionMethod($c, $this->method);
+			$requiredParams = $method->getNumberOfRequiredParameters();
+			$numParams = count($this->params) > 0 ? count($this->params) : 0;
+		}
+
+		if ($method) {
+			if ($numParams < $requiredParams)
 			{
-				$mtd = new ReflectionMethod($c, $method);
-				$requiredParams = $mtd->getNumberOfRequiredParameters();
-				$numParams = count($params) > 0 ? count($params) : 0;
-
-				if ($numParams >= $requiredParams)
-				{
-					call_user_func_array(array($c, $method), $params);
-				}
-				else {
-					if ($debug) {
-						// method required parameter
-						echo '<span style="background: #ffd; font-weight: bold">WARN</span>: method "<span style="background:#ddd;"><code>'.$method.'</code></span>" required <span style="background:#f0f0f0;"><code><b>"'.$requiredParams.'"</b> parameter(s)</code></span>.';
-					}
-					else {
-						// redirect to views/error/404
-						$this->views('errors/500');
-					}
-				}
-			}
-			
-			else {	
-				if (empty($method)) {
-					// method is empty
-					echo '<span style="background: #ffd; font-weight: bold">WARN</span>: method is empty.';
-				} else {
-					if ($debug) {
-						// method % not found
-						echo '<span style="background: #ffd; font-weight: bold">WARN</span>: method "<span style="background:#f0f0f0;"><code>'.$method.'</code></span>" not found.';
-					}
-					else {
-						// redirect to views/error/404
-						$this->views('errors/404');
-					}
-				}
-			}
-
-		}
-
-		else {
-			if (empty($controller)) {
-				// controller is empty
-				echo '<span style="background: #fdd; font-weight: bold">ERR</span>: controller is empty.';
-			}
-
-			else {
-				if ($debug) {
-					// controller % not found
-					echo '<span style="background: #fdd; font-weight: bold">ERR</span>: controller "<span style="background:#f0f0f0;"><code>'.$controller.'</code></span>" not found.';
-				}
-				else {
-					// redirect to views/error/404
-					$this->views('errors/404');
-				}
+				$debug ? $this->notice('params', 'required "'.$requiredParams.'".') : '';
 			}
 		}
+		
+		error_reporting(-0);
+		call_user_func_array(array($c, $this->method), $this->params);
+
+	}
+
+
+	public function notice($type, $content)
+	{
+		echo '<code style="display:block;padding:10px;margin:10px;margin:10px;background:#f0f0f0"><b>'.$type.'</b>: '.$content.'</code>';
 	}
 
 

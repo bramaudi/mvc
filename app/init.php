@@ -11,3 +11,4 @@ foreach (glob('app/libs/*.php') as $file) {
 }
 
 $app = new Core(DEBUG_MODE);
+$app->debug();
