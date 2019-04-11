@@ -8,26 +8,18 @@ class Users extends Database {
 	{
 		$this->users = array(
 			array(
-				'nama'		=> 'Brama Udi',
-				'alamat'	=> 'Mendalan'
+				'id'			=> 1,
+				'name'		=> 'John'
 			),
 			array(
-				'nama'		=> 'Brama Udi',
-				'alamat'	=> 'Mendalan'
+				'id'			=> 2,
+				'name'		=> 'Doe'
 			),
 			array(
-				'nama'		=> 'Brama Udi',
-				'alamat'	=> 'Mendalan'
+				'id'			=> 3,
+				'name'		=> 'Oddy'
 			)
 		);
-	}
-
-	public function get()
-	{
-		$this->stmt = $this->db->prepare('SELECT * FROM users');
-		$this->stmt->execute();
-
-		return $this->stmt->fetch(PDO::FETCH_ASSOC);
 	}
 
 }

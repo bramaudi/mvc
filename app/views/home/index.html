@@ -1,4 +1,7 @@
-Halo
-{loop:$user}
-{$user[].nama}
-{/loop:$user}
+Test param: {$param} <br>
+Test loop: <br>
+<ul>
+	{loop:$user}
+	<li>ID: {$user[].id} - {$user[].name}</li>
+	{/loop:$user}
+</ul>
