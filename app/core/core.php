@@ -57,47 +57,38 @@ class Core extends Controllers {
 						// method required parameter
 						echo '<span style="background: #ffd; font-weight: bold">WARN</span>: method "<span style="background:#ddd;"><code>'.$method.'</code></span>" required <span style="background:#f0f0f0;"><code><b>"'.$requiredParams.'"</b> parameter(s)</code></span>.';
 					}
-					else {
-						// redirect to views/error/404
-						$this->views('errors/500');
-					}
 				}
 			}
 			
 			else {	
-				if (empty($method)) {
-					// method is empty
-					echo '<span style="background: #ffd; font-weight: bold">WARN</span>: method is empty.';
-				} else {
-					if ($debug) {
+				if ($debug)
+				{
+					if (empty($method)) {
+						// method is empty
+						echo '<span style="background: #ffd; font-weight: bold">WARN</span>: method is empty.';
+					} else {
 						// method % not found
 						echo '<span style="background: #ffd; font-weight: bold">WARN</span>: method "<span style="background:#f0f0f0;"><code>'.$method.'</code></span>" not found.';
-					}
-					else {
-						// redirect to views/error/404
-						$this->views('errors/404');
 					}
 				}
 			}
 
 		}
 
-		else {
-			if (empty($controller)) {
-				// controller is empty
-				echo '<span style="background: #fdd; font-weight: bold">ERR</span>: controller is empty.';
-			}
-
-			else {
-				if ($debug) {
+		else
+		{
+			
+			if ($debug)
+			{
+				if (empty($controller)) {
+					// controller is empty
+					echo '<span style="background: #fdd; font-weight: bold">ERR</span>: controller is empty.';
+				} else {
 					// controller % not found
 					echo '<span style="background: #fdd; font-weight: bold">ERR</span>: controller "<span style="background:#f0f0f0;"><code>'.$controller.'</code></span>" not found.';
 				}
-				else {
-					// redirect to views/error/404
-					$this->views('errors/404');
-				}
 			}
+
 		}
 	}
 
