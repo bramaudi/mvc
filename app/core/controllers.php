@@ -3,10 +3,12 @@
 class Controllers {
 
 	private $tpl;
+	public $plugin;
 
 	public function __construct()
 	{
 		$this->tpl = new tinyTemplate();
+		$this->plugin = new Plugin();
 	}
 
 
