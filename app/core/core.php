@@ -29,7 +29,7 @@ class Core extends Controllers {
 		$path = './app/controllers/'.$this->controller.'.php';
 
 		if (!file_exists($path)) {
-			$this->notice('controller','"'.$this->controller.'" not found.');
+			$debug ? $this->notice('controller','"'.$this->controller.'" not found.') : '';
 			$this->controller = 'home';
 			$this->params = (array)$url[1];
 		}
@@ -38,7 +38,7 @@ class Core extends Controllers {
 		$c = new $this->controller;
 
 		if (!method_exists($c, $this->method)) {
-			$this->notice('method','"'.$this->method.'" not found in "'.$this->controller.'" controller.');	
+			$debug ? $this->notice('method','"'.$this->method.'" not found in "'.$this->controller.'" controller.') : '';
 			$this->method = 'main';
 			$this->params = (array)$url[2];
 			$method = 0;
