@@ -24,6 +24,7 @@ class Core extends Controllers {
 		}
 
 		$this->controller = isset($url[1]) ? $url[1] : $this->controller;
+		$this->controller = str_replace('.','/', $this->controller);
 		$this->method = isset($url[2]) ? $url[2] : $this->method;
 
 		$path = './app/controllers/'.$this->controller.'.php';
@@ -35,7 +36,8 @@ class Core extends Controllers {
 		}
 
 		require './app/controllers/'.$this->controller.'.php';
-		$c = new $this->controller;
+		$controllerName = explode('/',$this->controller);
+		$c = new $controllerName[count($controllerName)-1];
 
 		if (!method_exists($c, $this->method)) {
 			$debug ? $this->notice('method','"'.$this->method.'" not found in "'.$this->controller.'" controller.') : '';
