@@ -12,12 +12,12 @@ class Controllers {
 	}
 
 
-	public function view($view, $data = [])
+	public function view($view, $data = [], $filter = true)
 	{
 		$path = './app/views/' .$view. '.html';
 		if (file_exists($path)) {
 			foreach ($data as $key => $value) {
-				$this->tpl->set($key, $value);
+				$this->tpl->set($key, $value, $filter);
 			}
 			echo $this->tpl->fetch($path);
 			// $file = file_get_contents($path);
