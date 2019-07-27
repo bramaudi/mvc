@@ -3,11 +3,13 @@
 class Controllers {
 
 	private $tpl;
+	private $tplx;
 	public $plugin;
 
 	public function __construct()
 	{
 		$this->tpl = new tinyTemplate();
+		$this->tplx = new tinyTemplate();
 		$this->plugin = new Plugin();
 	}
 
@@ -38,6 +40,27 @@ class Controllers {
 	}
 
 
+	public function include($view, $data = [], $filter = true)
+	{
+		$path = './app/views/' .$view. '.html';
+		if (file_exists($path)) {
+			foreach ($data as $key => $value) {
+				$this->tplx->set($key, $value, $filter);
+			}
+			return $this->tplx->fetch($path);
+		}
+		else {
+			if (DEBUG_MODE) {
+				// views % not found
+				echo '<span style="background: #dfd; font-weight: bold">INFO</span>: cant include "<span style="background:#f0f0f0;"><code>'.$view.'</code></span>" is not found.';
+			}
+			else {
+				require_once './app/views/errors/404.html';
+			}
+		}
+	}
+
+
 	public function model($model)
 	{
 		$path = './app/models/' .$model. '.php';
@@ -55,5 +78,9 @@ class Controllers {
 			}
 		}
 	}
+
+
+	/** Extended method can write here */
+
 	
 }
