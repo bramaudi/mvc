@@ -22,6 +22,12 @@ class Database {
 		}
 	}
 
+	
+	public function quote($var)
+	{
+		return $this->db->quote($var);
+	}
+
 
 	public function query($query)
 	{
@@ -64,6 +70,12 @@ class Database {
 		$this->stmt = $this->db->prepare($query);
 		$this->stmt->execute();
 		return $this->stmt->fetchColumn();
+	}
+
+
+	public function rowCount()
+	{
+		return $this->stmt->rowCount();
 	}
 
 
